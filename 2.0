@@ -1,0 +1,29 @@
+%参考文献"Rapid hydrate-based methane storage promoted by bilayer surfactant-coated Fe3O4 nanoparticles under a magnetic field"
+clc;clear;
+R=8.314;
+M=5.75;%水合数，取5.75-6
+deltV_m=4.6e-6;%空白水合物晶格与水分子的摩尔体积变化
+n1=0.0002;%初始假设消耗气体数量
+%消耗的甲烷摩尔数
+P_0=5900e3;%初始压力
+P_t=2700e3;%结束时压力
+V_0=105e-6;%初始釜中的体积
+Z_0=1;%初始压缩常数
+Z_t=1;%结束时的压缩常数
+T_0=273.15+1;%初始温度
+T_t=273.15+1;%结束时温度
+
+error=1;
+while error > 0.000001
+
+    deltV_Hw=M.*n1.*deltV_m;%生成水合物体积与消耗水体积之差
+    V_cell=205e-6;%反应釜体积
+    V_s=100e-6;%初始反应液体体积
+    V_t=V_cell-V_s-deltV_Hw;%反应过程中釜中气体体积变化
+    
+    n=P_0.*V_0./(Z_0.*R.*T_0)-P_t.*V_t./(Z_t.*R.*T_t);%水合物吸收的气体的数量
+    error=abs(n-n1);
+    n1=n;
+end
+
+disp(['n=',num2str(n1)])
